@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#8B4513">
+<title>لوحة التحكم | مطعم القدموس</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brown:#8B4513;--brown-dark:#6B3410;--brown-light:#A0522D;
+  --gold:#C9A227;--gold-light:#E5C158;
+  --cream:#FAF3E0;--cream-dark:#F0E6CE;
+  --olive:#556B2F;--brick:#B22222;
+  --text:#2C1810;--text-light:#6B5B4A;
+  --white:#FFFFFF;
+  --shadow:0 4px 20px rgba(139,69,19,.12);
+  --shadow-lg:0 12px 40px rgba(139,69,19,.22);
+  --radius:16px;--radius-sm:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Cairo',sans-serif;background:var(--cream);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,textarea,select{font-family:inherit}
+img{display:block;max-width:100%}
+
+/* ===== Login ===== */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,var(--brown-dark),var(--brown))}
+.login-card{background:var(--white);border-radius:24px;padding:36px 28px;max-width:420px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.35);border:1px solid rgba(201,162,39,.3);position:relative;overflow:hidden}
+.login-card::before{content:"";position:absolute;top:0;right:0;left:0;height:6px;background:linear-gradient(90deg,var(--gold),var(--gold-light),var(--gold))}
+.login-logo{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--brown),var(--brown-dark));display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:900;font-size:30px;margin:0 auto 16px;box-shadow:0 6px 20px rgba(139,69,19,.35)}
+.login-title{text-align:center;font-size:22px;font-weight:900;color:var(--brown-dark);margin-bottom:6px}
+.login-sub{text-align:center;font-size:13px;color:var(--text-light);margin-bottom:26px;font-weight:600}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:13px;font-weight:700;color:var(--brown-dark);margin-bottom:6px}
+.form-label .req{color:var(--brick)}
+.form-input,.form-textarea,.form-select{width:100%;padding:13px 15px;border-radius:12px;border:1.5px solid rgba(201,162,39,.35);background:var(--white);font-size:14.5px;color:var(--text);font-weight:600;outline:none;transition:border-color .2s,box-shadow .2s}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--gold);box-shadow:0 2px 12px rgba(201,162,39,.2)}
+.form-input:disabled{background:var(--cream-dark);color:var(--text-light);cursor:not-allowed}
+.form-textarea{min-height:80px;resize:vertical}
+.form-note{font-size:11.5px;color:var(--text-light);margin-top:5px;line-height:1.5}
+.login-btn{width:100%;padding:15px;border-radius:30px;background:linear-gradient(135deg,var(--brown),var(--brown-dark));color:var(--gold-light);font-size:15.5px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 20px rgba(139,69,19,.3);transition:transform .2s;margin-top:8px}
+.login-btn:active{transform:scale(.97)}
+.login-btn:disabled{opacity:.6;pointer-events:none}
+.login-err{background:#FEE;color:var(--brick);padding:11px 14px;border-radius:10px;font-size:13px;font-weight:700;margin-bottom:14px;border:1px solid rgba(178,34,34,.25);display:none;text-align:center}
+.login-err.show{display:block}
+.back-link{text-align:center;margin-top:18px;font-size:12.5px}
+.back-link a{color:var(--brown);text-decoration:none;font-weight:700}
+
+/* ===== Admin Layout ===== */
+.admin-app{display:none;min-height:100vh;flex-direction:column}
+.admin-app.show{display:flex}
+.admin-header{background:linear-gradient(135deg,var(--brown),var(--brown-dark));color:var(--cream);padding:16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.admin-header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.admin-brand{display:flex;align-items:center;gap:12px}
+.admin-logo{width:42px;height:42px;border-radius:50%;background:rgba(201,162,39,.2);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-light);font-weight:900;font-size:18px}
+.admin-brand-name{font-size:16px;font-weight:900;color:var(--gold-light)}
+.admin-brand-sub{font-size:11px;opacity:.8}
+.admin-header-actions{display:flex;gap:8px;align-items:center}
+.header-btn{padding:9px 16px;border-radius:24px;background:rgba(250,243,224,.15);color:var(--cream);font-size:13px;font-weight:700;border:1px solid rgba(201,162,39,.35);text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:background .2s}
+.header-btn:active{background:rgba(201,162,39,.3)}
+.header-btn.logout{background:rgba(178,34,34,.85);border-color:transparent;color:#fff}
+
+.admin-tabs{background:var(--white);border-bottom:1.5px solid rgba(201,162,39,.25);position:sticky;top:74px;z-index:90;box-shadow:0 2px 10px rgba(139,69,19,.06)}
+.admin-tabs-inner{max-width:1200px;margin:0 auto;display:flex;gap:4px;padding:0 12px;overflow-x:auto;scrollbar-width:none}
+.admin-tabs-inner::-webkit-scrollbar{display:none}
+.tab-btn{padding:16px 20px;font-size:14px;font-weight:800;color:var(--text-light);border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:8px}
+.tab-btn.active{color:var(--brown-dark);border-bottom-color:var(--gold)}
+.tab-btn:active{background:rgba(201,162,39,.08)}
+
+.admin-main{flex:1;max-width:1200px;width:100%;margin:0 auto;padding:22px 16px 80px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.panel-title{font-size:22px;font-weight:900;color:var(--brown-dark);margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.panel-sub{font-size:13px;color:var(--text-light);margin-bottom:20px;font-weight:600}
+
+.card-box{background:var(--white);border-radius:var(--radius);padding:22px 20px;box-shadow:var(--shadow);border:1px solid rgba(201,162,39,.2);margin-bottom:20px}
+.card-box-title{font-size:16px;font-weight:900;color:var(--brown-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px;padding-bottom:12px;border-bottom:1.5px dashed rgba(201,162,39,.3)}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}}
+
+.btn{padding:13px 22px;border-radius:30px;font-size:14.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .2s;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--brown),var(--brown-dark));color:var(--gold-light)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--brown-dark)}
+.btn-danger{background:var(--brick);color:#fff}
+.btn-ghost{background:var(--cream);color:var(--brown-dark);border:1.5px solid rgba(201,162,39,.4);box-shadow:none}
+.btn-full{width:100%}
+.btn:disabled{opacity:.55;pointer-events:none}
+
+.image-upload{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.image-preview{width:130px;height:130px;border-radius:14px;background:var(--cream-dark);border:2px dashed rgba(201,162,39,.5);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;position:relative}
+.image-preview img{width:100%;height:100%;object-fit:cover}
+.image-preview-icon{font-size:34px;color:var(--text-light);opacity:.5}
+.image-upload-info{flex:1;min-width:200px}
+.file-input-wrap{position:relative;display:inline-block;width:100%}
+.file-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.file-btn{width:100%;padding:13px;border-radius:30px;background:var(--cream);color:var(--brown-dark);border:1.5px dashed rgba(201,162,39,.55);font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;pointer-events:none}
+.upload-progress{height:6px;border-radius:3px;background:var(--cream-dark);overflow:hidden;margin-top:10px;display:none}
+.upload-progress.show{display:block}
+.upload-progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--gold-light));transition:width .3s}
+
+.items-list{display:flex;flex-direction:column;gap:10px}
+.item-row{display:flex;gap:12px;background:var(--white);border-radius:var(--radius-sm);padding:12px;box-shadow:0 2px 8px rgba(139,69,19,.08);border:1px solid rgba(201,162,39,.15);align-items:center}
+.item-row-img{width:64px;height:64px;border-radius:10px;object-fit:cover;background:var(--cream-dark);flex-shrink:0}
+.item-row-info{flex:1;min-width:0}
+.item-row-name{font-size:15px;font-weight:800;color:var(--brown-dark);line-height:1.3;margin-bottom:3px}
+.item-row-meta{font-size:12px;color:var(--text-light);font-weight:600;display:flex;gap:10px;flex-wrap:wrap}
+.item-row-cat{background:var(--cream);color:var(--brown);padding:2px 9px;border-radius:12px;font-size:11px;font-weight:700}
+.item-row-price{color:var(--brown);font-weight:900}
+.item-row-actions{display:flex;gap:6px;flex-shrink:0}
+.icon-btn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;transition:transform .15s}
+.icon-btn:active{transform:scale(.9)}
+.icon-btn.edit{background:var(--cream);color:var(--brown);border:1px solid rgba(201,162,39,.4)}
+.icon-btn.del{background:#FEE;color:var(--brick);border:1px solid rgba(178,34,34,.25)}
+
+.empty-box{text-align:center;padding:40px 20px;color:var(--text-light)}
+.empty-box-icon{font-size:50px;opacity:.4;margin-bottom:10px}
+.empty-box-title{font-size:15px;font-weight:800;color:var(--brown-dark);margin-bottom:4px}
+
+.delivery-row{display:flex;gap:8px;align-items:center;margin-bottom:10px;background:var(--cream);padding:10px;border-radius:12px;border:1px solid rgba(201,162,39,.2)}
+.delivery-row input{flex:1;padding:10px 12px;border-radius:8px;border:1.5px solid rgba(201,162,39,.3);background:var(--white);font-size:13px;font-weight:600;outline:none}
+.delivery-row input:focus{border-color:var(--gold)}
+.delivery-row input.icon-field{max-width:60px;text-align:center;font-size:18px}
+.delivery-row .icon-btn{flex-shrink:0}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--brown-dark);color:var(--cream);padding:13px 24px;border-radius:30px;font-size:14px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:9999;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;display:flex;align-items:center;gap:10px;border:1px solid rgba(201,162,39,.4);max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:#25D366;color:#fff;border-color:transparent}
+.toast.error{background:var(--brick);color:#fff;border-color:transparent}
+
+.loading-msg{text-align:center;padding:30px;color:var(--text-light);font-weight:600;font-size:14px}
+
+.divider{height:1px;background:rgba(201,162,39,.25);margin:20px 0}
+
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.stat-card{background:var(--white);border-radius:var(--radius-sm);padding:16px;box-shadow:var(--shadow);border:1px solid rgba(201,162,39,.15);text-align:center}
+.stat-val{font-size:26px;font-weight:900;color:var(--brown-dark);line-height:1}
+.stat-label{font-size:11.5px;color:var(--text-light);font-weight:700;margin-top:4px}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <div class="login-logo">ق</div>
+    <div class="login-title">لوحة التحكم</div>
+    <div class="login-sub">مطعم القدموس</div>
+    <div class="login-err" id="loginErr"></div>
+    <div class="form-group">
+      <label class="form-label">البريد الإلكتروني</label>
+      <input type="email" class="form-input" id="loginEmail" value="admin@kadmous.com" disabled>
+      <div class="form-note">✉️ الإيميل ثابت للأدمن فقط</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">كلمة المرور <span class="req">*</span></label>
+      <input type="password" class="form-input" id="loginPassword" placeholder="أدخل كلمة المرور" autocomplete="current-password">
+    </div>
+    <button class="login-btn" id="loginBtn">🔐 تسجيل الدخول</button>
+    <div class="back-link"><a href="index.html">← العودة إلى المنيو</a></div>
+  </div>
+</div>
+
+<!-- ===== ADMIN APP ===== -->
+<div class="admin-app" id="adminApp">
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <div class="admin-brand">
+        <div class="admin-logo">ق</div>
+        <div>
+          <div class="admin-brand-name">لوحة التحكم</div>
+          <div class="admin-brand-sub">مطعم القدموس</div>
+        </div>
+      </div>
+      <div class="admin-header-actions">
+        <a class="header-btn" href="index.html" target="_blank">👁️ عرض المنيو</a>
+        <button class="header-btn logout" id="logoutBtn">🚪 خروج</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="admin-tabs">
+    <div class="admin-tabs-inner">
+      <button class="tab-btn active" data-tab="items">🍽️ الأصناف</button>
+      <button class="tab-btn" data-tab="settings">⚙️ الإعدادات</button>
+    </div>
+  </nav>
+
+  <main class="admin-main">
+
+    <!-- ===== TAB: ITEMS ===== -->
+    <section class="panel active" id="panel-items">
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-val" id="statTotal">0</div><div class="stat-label">إجمالي الأصناف</div></div>
+        <div class="stat-card"><div class="stat-val" id="statCats">0</div><div class="stat-label">الأقسام</div></div>
+        <div class="stat-card"><div class="stat-val" id="statWithImg">0</div><div class="stat-label">أصناف بصور</div></div>
+      </div>
+
+      <div class="card-box">
+        <div class="card-box-title" id="formTitle">➕ إضافة صنف جديد</div>
+        <input type="hidden" id="editingId">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">القسم <span class="req">*</span></label>
+            <input type="text" class="form-input" id="itemCategory" placeholder="مثال: مقبلات، مشاوي..." list="catList">
+            <datalist id="catList"></datalist>
+          </div>
+          <div class="form-group">
+            <label class="form-label">اسم الصنف <span class="req">*</span></label>
+            <input type="text" class="form-input" id="itemName" placeholder="مثال: حمص بطحينة">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">السعر (ل.س) <span class="req">*</span></label>
+            <input type="number" class="form-input" id="itemPrice" placeholder="15000" min="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">الوصف (اختياري)</label>
+          <textarea class="form-textarea" id="itemDesc" placeholder="وصف قصير للطبق..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">الصورة</label>
+          <div class="image-upload">
+            <div class="image-preview" id="imgPreview">
+              <div class="image-preview-icon">📷</div>
+            </div>
+            <div class="image-upload-info">
+              <div class="file-input-wrap">
+                <input type="file" class="file-input" id="itemImage" accept="image/*">
+                <div class="file-btn">📁 اختر صورة (تُضغط وتُرفع تلقائياً)</div>
+              </div>
+              <div class="form-note">📌 الصورة تُضغط لحجم أقصى 800×800 بجودة 80%، ثم تُرفع لـ Cloudinary.</div>
+              <div class="upload-progress" id="uploadProgress"><div class="upload-progress-bar" id="uploadProgressBar"></div></div>
+              <input type="hidden" id="itemImageUrl">
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+          <button class="btn btn-primary" id="saveItemBtn">💾 حفظ الصنف</button>
+          <button class="btn btn-ghost" id="cancelEditBtn" style="display:none">❌ إلغاء التعديل</button>
+        </div>
+      </div>
+
+      <div class="card-box">
+        <div class="card-box-title">📋 الأصناف الحالية <span id="itemsCountBadge" style="background:var(--gold);color:var(--brown-dark);padding:2px 10px;border-radius:12px;font-size:12px;margin-right:auto"></span></div>
+        <input type="text" class="form-input" id="searchItems" placeholder="🔍 ابحث في الأصناف..." style="margin-bottom:14px">
+        <div class="items-list" id="itemsList">
+          <div class="loading-msg">جاري التحميل...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TAB: SETTINGS ===== -->
+    <section class="panel" id="panel-settings">
+      <div class="card-box">
+        <div class="card-box-title">🏪 معلومات النشاط</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">اسم النشاط</label>
+            <input type="text" class="form-input" id="setName" placeholder="مطعم القدموس">
+          </div>
+          <div class="form-group">
+            <label class="form-label">العنوان الفرعي</label>
+            <input type="text" class="form-input" id="setSubtitle" placeholder="دمشق - شارع الحمراء، مقابل بناء زارا">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">نص الحالة</label>
+            <input type="text" class="form-input" id="setStatus" placeholder="مفتوح الآن">
+          </div>
+          <div class="form-group">
+            <label class="form-label">لون الحالة</label>
+            <select class="form-select" id="setStatusType">
+              <option value="open">🟢 مفتوح (أخضر)</option>
+              <option value="orders">🟡 نستقبل طلبات (ذهبي)</option>
+              <option value="closed">🔴 مغلق (أحمر)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">رابط صورة الهيرو (Cloudinary)</label>
+          <input type="text" class="form-input" id="setHeroImage" placeholder="https://res.cloudinary.com/...">
+          <div class="form-note">📌 يمكنك رفع صورة من تبويب الأصناف ونسخ رابطها هنا، أو وضع رابط أي صورة.</div>
+        </div>
+      </div>
+
+      <div class="card-box">
+        <div class="card-box-title">📞 أرقام التواصل</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">واتساب (بصيغة دولية بدون +)</label>
+            <input type="text" class="form-input" id="setWhatsapp" placeholder="963949185059">
+          </div>
+          <div class="form-group">
+            <label class="form-label">واتساب (نص ظاهر)</label>
+            <input type="text" class="form-input" id="setWhatsappDisplay" placeholder="0949185059">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">هاتف 1</label>
+            <input type="text" class="form-input" id="setPhone" placeholder="0113314502">
+          </div>
+          <div class="form-group">
+            <label class="form-label">هاتف 1 (نص ظاهر)</label>
+            <input type="text" class="form-input" id="setPhoneDisplay" placeholder="011-3314502">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">هاتف 2 (اختياري)</label>
+            <input type="text" class="form-input" id="setPhone2" placeholder="0966773377">
+          </div>
+          <div class="form-group">
+            <label class="form-label">هاتف 2 (نص ظاهر)</label>
+            <input type="text" class="form-input" id="setPhone2Display" placeholder="0966-773-377">
+          </div>
+        </div>
+      </div>
+
+      <div class="card-box">
+        <div class="card-box-title">📍 العنوان والخريطة</div>
+        <div class="form-group">
+          <label class="form-label">العنوان الكامل</label>
+          <input type="text" class="form-input" id="setAddress" placeholder="دمشق - شارع الحمراء، مقابل بناء زارا">
+        </div>
+        <div class="form-group">
+          <label class="form-label">رابط Google Maps</label>
+          <input type="text" class="form-input" id="setMapUrl" placeholder="https://maps.google.com/...">
+        </div>
+      </div>
+
+      <div class="card-box">
+        <div class="card-box-title">🛵 خيارات التوصيل</div>
+        <div class="form-group">
+          <label class="form-label">عنوان قسم التوصيل</label>
+          <input type="text" class="form-input" id="setDeliveryNote" placeholder="التوصيل متوفر داخل دمشق عبر:">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="display:flex;align-items:center;gap:10px;cursor:pointer">
+            <input type="checkbox" id="setDeliveryShow" style="width:auto">
+            <span>عرض قسم التوصيل في الموقع</span>
+          </label>
+        </div>
+        <div id="deliveryList"></div>
+        <button class="btn btn-ghost" id="addDeliveryBtn" style="margin-top:6px">➕ إضافة خيار توصيل</button>
+      </div>
+
+      <button class="btn btn-primary btn-full" id="saveSettingsBtn" style="margin-top:6px">💾 حفظ جميع الإعدادات</button>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, onSnapshot, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC7wqsxUaKA2Tp5BeT4pEv8CrDGk89nNKw",
+  authDomain: "kadmous-69eca.firebaseapp.com",
+  projectId: "kadmous-69eca",
+  storageBucket: "kadmous-69eca.firebasestorage.app",
+  messagingSenderId: "883346998408",
+  appId: "1:883346998408:web:91bd0a9ba9f501203d0b3d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+/* ===== Cloudinary ===== */
+const CLOUD_NAME = "vfdkxutu";
+const UPLOAD_PRESET = "alqudmus";
+const CLOUDINARY_FOLDER = "kadmous/menu";
+
+/* ===== Config ===== */
+const ADMIN_EMAIL = "admin@kadmous.com";
+
+/* ===== State ===== */
+let allItems = [];
+let editingId = null;
+let currentImageUrl = "";
+let settings = {};
+let deliveryOptions = [];
+
+/* ===== Helpers ===== */
+const $ = id => document.getElementById(id);
+const fmt = n => Number(n || 0).toLocaleString('en-US');
+const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+
+function showToast(msg, type = "") {
+  const t = $("toast");
+  t.textContent = msg;
+  t.className = "toast show " + type;
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.className = "toast " + type, 3000);
+}
+
+/* ===== Login ===== */
+$("loginBtn").onclick = async () => {
+  const pass = $("loginPassword").value;
+  const errBox = $("loginErr");
+  errBox.classList.remove("show");
+
+  if (!pass) {
+    errBox.textContent = "⚠️ الرجاء إدخال كلمة المرور";
+    errBox.classList.add("show");
+    return;
+  }
+
+  const btn = $("loginBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ جاري التحقق...";
+
+  try {
+    await signInWithEmailAndPassword(auth, ADMIN_EMAIL, pass);
+    // onAuthStateChanged will handle the rest
+  } catch (err) {
+    console.error(err);
+    let msg = "❌ فشل تسجيل الدخول";
+    if (err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") msg = "❌ كلمة المرور غير صحيحة";
+    else if (err.code === "auth/user-not-found") msg = "❌ المستخدم غير موجود";
+    else if (err.code === "auth/too-many-requests") msg = "⚠️ حاولت كثيراً. انتظر دقيقة ثم أعد المحاولة";
+    else if (err.code === "auth/network-request-failed") msg = "🌐 تحقق من اتصال الإنترنت";
+    errBox.textContent = msg;
+    errBox.classList.add("show");
+    btn.disabled = false;
+    btn.textContent = "🔐 تسجيل الدخول";
+  }
+};
+
+$("loginPassword").addEventListener("keydown", e => { if (e.key === "Enter") $("loginBtn").click(); });
+
+$("logoutBtn").onclick = async () => {
+  if (!confirm("هل أنت متأكد من تسجيل الخروج؟")) return;
+  await signOut(auth);
+};
+
+onAuthStateChanged(auth, user => {
+  const loginWrap = $("loginWrap");
+  const adminApp = $("adminApp");
+  const loginBtn = $("loginBtn");
+
+  if (user && user.email === ADMIN_EMAIL) {
+    loginWrap.style.display = "none";
+    adminApp.classList.add("show");
+    $("loginPassword").value = "";
+    loginBtn.disabled = false;
+    loginBtn.textContent = "🔐 تسجيل الدخول";
+    startListeners();
+  } else {
+    loginWrap.style.display = "flex";
+    adminApp.classList.remove("show");
+    loginBtn.disabled = false;
+    loginBtn.textContent = "🔐 تسجيل الدخول";
+    stopListeners();
+  }
+});
+
+/* ===== Listeners ===== */
+let unsubMenu = null;
+let unsubSettings = null;
+let listenersActive = false;
+
+function startListeners() {
+  if (listenersActive) return;
+  listenersActive = true;
+
+  // Menu
+  unsubMenu = onSnapshot(doc(db, "menu", "all"), snap => {
+    if (snap.exists()) {
+      const data = snap.data();
+      allItems = Array.isArray(data.items) ? data.items : [];
+    } else {
+      allItems = [];
+    }
+    renderItemsList();
+    renderStats();
+    renderCategoryDatalist();
+  }, err => {
+    console.error(err);
+    showToast("⚠️ خطأ في تحميل الأصناف", "error");
+  });
+
+  // Settings
+  unsubSettings = onSnapshot(doc(db, "settings", "info"), snap => {
+    if (snap.exists()) {
+      settings = snap.data();
+      deliveryOptions = Array.isArray(settings.deliveryOptions) ? [...settings.deliveryOptions] : [];
+    } else {
+      settings = {};
+      deliveryOptions = [];
+    }
+    loadSettingsForm();
+  }, err => {
+    console.error(err);
+  });
+}
+
+function stopListeners() {
+  if (unsubMenu) { unsubMenu(); unsubMenu = null; }
+  if (unsubSettings) { unsubSettings(); unsubSettings = null; }
+  listenersActive = false;
+}
+
+/* ===== Tabs ===== */
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    $("panel-" + btn.dataset.tab).classList.add("active");
+  };
+});
+
+/* ===== Stats ===== */
+function renderStats() {
+  $("statTotal").textContent = allItems.length;
+  const cats = new Set(allItems.map(i => i.category).filter(Boolean));
+  $("statCats").textContent = cats.size;
+  $("statWithImg").textContent = allItems.filter(i => i.imageUrl).length;
+}
+
+/* ===== Category datalist ===== */
+function renderCategoryDatalist() {
+  const cats = [...new Set(allItems.map(i => i.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ar'));
+  $("catList").innerHTML = cats.map(c => `<option value="${c}">`).join("");
+}
+
+/* ===== Render Items List ===== */
+function renderItemsList() {
+  const q = ($("searchItems").value || "").trim().toLowerCase();
+  let list = [...allItems];
+  if (q) list = list.filter(i => (i.name||"").toLowerCase().includes(q) || (i.category||"").toLowerCase().includes(q));
+  list.sort((a, b) => (a.category || '').localeCompare(b.category || '', 'ar'));
+
+  $("itemsCountBadge").textContent = allItems.length;
+
+  const box = $("itemsList");
+  if (!list.length) {
+    box.innerHTML = `<div class="empty-box">
+      <div class="empty-box-icon">🍽️</div>
+      <div class="empty-box-title">${q ? 'لا نتائج مطابقة' : 'لا توجد أصناف بعد'}</div>
+      <div>${q ? 'جرب كلمة أخرى' : 'أضف أول صنف من النموذج أعلاه'}</div>
+    </div>`;
+    return;
+  }
+
+  box.innerHTML = list.map(i => `
+    <div class="item-row">
+      <img class="item-row-img" src="${i.imageUrl || 'https://placehold.co/200x200/8B4513/C9A227?text=K'}" onerror="this.src='https://placehold.co/200x200/8B4513/C9A227?text=K'" alt="">
+      <div class="item-row-info">
+        <div class="item-row-name">${i.name || ''}</div>
+        <div class="item-row-meta">
+          <span class="item-row-cat">${i.category || ''}</span>
+          <span class="item-row-price">${fmt(i.price)} ل.س</span>
+        </div>
+      </div>
+      <div class="item-row-actions">
+        <button class="icon-btn edit" data-edit="${i.id}" title="تعديل">✏️</button>
+        <button class="icon-btn del" data-del="${i.id}" title="حذف">🗑️</button>
+      </div>
+    </div>
+  `).join("");
+
+  box.querySelectorAll("[data-edit]").forEach(b => b.onclick = () => startEdit(b.dataset.edit));
+  box.querySelectorAll("[data-del]").forEach(b => b.onclick = () => deleteItem(b.dataset.del));
+}
+
+$("searchItems").addEventListener("input", renderItemsList);
+
+/* ===== Image Compression + Upload ===== */
+function compressImage(file, maxSize = 800, quality = 0.8) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxSize || height > maxSize) {
+          const ratio = Math.min(maxSize / width, maxSize / height);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(blob => {
+          if (blob) resolve(blob);
+          else reject(new Error("فشل ضغط الصورة"));
+        }, "image/jpeg", quality);
+      };
+      img.onerror = () => reject(new Error("ملف غير صالح"));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error("فشل قراءة الملف"));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadToCloudinary(blob) {
+  const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+  const fd = new FormData();
+  fd.append("file", blob);
+  fd.append("upload_preset", UPLOAD_PRESET);
+  if (CLOUDINARY_FOLDER) fd.append("folder", CLOUDINARY_FOLDER);
+
+  const res = await fetch(url, { method: "POST", body: fd });
+  if (!res.ok) {
+    const errText = await res.text();
+    console.error("Cloudinary error:", errText);
+    throw new Error("فشل رفع الصورة");
+  }
+  const data = await res.json();
+  return data.secure_url;
+}
+
+$("itemImage").addEventListener("change", async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    showToast("⚠️ الرجاء اختيار ملف صورة", "error");
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    showToast("⚠️ الصورة كبيرة جداً (حد أقصى 10MB)", "error");
+    return;
+  }
+
+  const prog = $("uploadProgress");
+  const bar = $("uploadProgressBar");
+  prog.classList.add("show");
+  bar.style.width = "15%";
+
+  try {
+    showToast("⏳ جاري ضغط الصورة...");
+    bar.style.width = "35%";
+    const blob = await compressImage(file);
+
+    // Preview immediately
+    const previewUrl = URL.createObjectURL(blob);
+    $("imgPreview").innerHTML = `<img src="${previewUrl}" alt="">`;
+    bar.style.width = "55%";
+
+    showToast("☁️ جاري رفع الصورة...");
+    const url = await uploadToCloudinary(blob);
+    bar.style.width = "100%";
+
+    currentImageUrl = url;
+    $("itemImageUrl").value = url;
+    $("imgPreview").innerHTML = `<img src="${url}" alt="">`;
+    showToast("✓ تم رفع الصورة بنجاح", "success");
+
+    setTimeout(() => {
+      prog.classList.remove("show");
+      bar.style.width = "0%";
+    }, 800);
+  } catch (err) {
+    console.error(err);
+    showToast("❌ فشل رفع الصورة. تحقق من إعدادات Cloudinary", "error");
+    prog.classList.remove("show");
+    bar.style.width = "0%";
+  }
+  e.target.value = "";
+});
+
+/* ===== Save Item ===== */
+$("saveItemBtn").onclick = async () => {
+  const category = $("itemCategory").value.trim();
+  const name = $("itemName").value.trim();
+  const priceRaw = $("itemPrice").value.trim();
+  const description = $("itemDesc").value.trim();
+  const imageUrl = $("itemImageUrl").value.trim() || currentImageUrl;
+
+  if (!category) return showToast("⚠️ الرجاء إدخال القسم", "error");
+  if (!name) return showToast("⚠️ الرجاء إدخال اسم الصنف", "error");
+  if (priceRaw === "" || isNaN(Number(priceRaw)) || Number(priceRaw) < 0) return showToast("⚠️ سعر غير صالح", "error");
+
+  const btn = $("saveItemBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ جاري الحفظ...";
+
+  try {
+    const price = Number(priceRaw);
+    let newItems;
+
+    if (editingId) {
+      newItems = allItems.map(i => i.id === editingId
+        ? { ...i, category, name, price, description, imageUrl }
+        : i
+      );
+    } else {
+      newItems = [...allItems, {
+        id: genId(),
+        category, name, price, description, imageUrl,
+        createdAt: Date.now()
+      }];
+    }
+
+    await setDoc(doc(db, "menu", "all"), { items: newItems });
+
+    showToast(editingId ? "✓ تم تعديل الصنف" : "✓ تمت إضافة الصنف", "success");
+    resetForm();
+  } catch (err) {
+    console.error(err);
+    showToast("❌ فشل الحفظ. تحقق من الصلاحيات", "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "💾 حفظ الصنف";
+  }
+};
+
+/* ===== Edit / Cancel ===== */
+function startEdit(id) {
+  const item = allItems.find(i => i.id === id);
+  if (!item) return;
+  editingId = id;
+  $("itemCategory").value = item.category || "";
+  $("itemName").value = item.name || "";
+  $("itemPrice").value = item.price || "";
+  $("itemDesc").value = item.description || "";
+  currentImageUrl = item.imageUrl || "";
+  $("itemImageUrl").value = item.imageUrl || "";
+  $("imgPreview").innerHTML = item.imageUrl
+    ? `<img src="${item.imageUrl}" alt="">`
+    : `<div class="image-preview-icon">📷</div>`;
+  $("formTitle").textContent = "✏️ تعديل صنف";
+  $("saveItemBtn").textContent = "💾 حفظ التعديلات";
+  $("cancelEditBtn").style.display = "inline-flex";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+$("cancelEditBtn").onclick = resetForm;
+
+function resetForm() {
+  editingId = null;
+  currentImageUrl = "";
+  $("itemCategory").value = "";
+  $("itemName").value = "";
+  $("itemPrice").value = "";
+  $("itemDesc").value = "";
+  $("itemImageUrl").value = "";
+  $("itemImage").value = "";
+  $("imgPreview").innerHTML = `<div class="image-preview-icon">📷</div>`;
+  $("formTitle").textContent = "➕ إضافة صنف جديد";
+  $("saveItemBtn").textContent = "💾 حفظ الصنف";
+  $("cancelEditBtn").style.display = "none";
+  $("uploadProgress").classList.remove("show");
+  $("uploadProgressBar").style.width = "0%";
+}
+
+/* ===== Delete ===== */
+async function deleteItem(id) {
+  const item = allItems.find(i => i.id === id);
+  if (!item) return;
+  if (!confirm(`هل أنت متأكد من حذف "${item.name}"؟`)) return;
+
+  try {
+    const newItems = allItems.filter(i => i.id !== id);
+    await setDoc(doc(db, "menu", "all"), { items: newItems });
+    showToast("✓ تم حذف الصنف", "success");
+    if (editingId === id) resetForm();
+  } catch (err) {
+    console.error(err);
+    showToast("❌ فشل الحذف", "error");
+  }
+}
+
+/* ===== Settings Form ===== */
+function loadSettingsForm() {
+  $("setName").value = settings.name || "";
+  $("setSubtitle").value = settings.subtitle || "";
+  $("setStatus").value = settings.status || "";
+  $("setStatusType").value = settings.statusType || "open";
+  $("setHeroImage").value = settings.heroImage || "";
+  $("setWhatsapp").value = settings.whatsapp || "";
+  $("setWhatsappDisplay").value = settings.whatsappDisplay || "";
+  $("setPhone").value = settings.phone || "";
+  $("setPhoneDisplay").value = settings.phoneDisplay || "";
+  $("setPhone2").value = settings.phone2 || "";
+  $("setPhone2Display").value = settings.phone2Display || "";
+  $("setAddress").value = settings.address || "";
+  $("setMapUrl").value = settings.mapUrl || "";
+  $("setDeliveryNote").value = settings.deliveryNote || "";
+  $("setDeliveryShow").checked = settings.deliveryShow !== false;
+  renderDeliveryList();
+}
+
+function renderDeliveryList() {
+  const box = $("deliveryList");
+  if (!deliveryOptions.length) {
+    box.innerHTML = `<div class="empty-box" style="padding:18px"><div style="font-size:13px;color:var(--text-light)">لا توجد خيارات توصيل. اضغط "إضافة خيار توصيل"</div></div>`;
+    return;
+  }
+  box.innerHTML = deliveryOptions.map((o, idx) => `
+    <div class="delivery-row">
+      <input type="text" class="icon-field" value="${o.icon || '🛵'}" data-icon="${idx}" placeholder="🛵">
+      <input type="text" value="${o.name || ''}" data-name="${idx}" placeholder="اسم الخيار (مثال: بي اوردر)">
+      <input type="text" value="${o.url || ''}" data-url="${idx}" placeholder="رابط أو رقم واتساب">
+      <button class="icon-btn del" data-remove-del="${idx}" title="حذف">🗑️</button>
+    </div>
+  `).join("");
+
+  box.querySelectorAll("[data-icon]").forEach(inp => inp.oninput = e => { deliveryOptions[+inp.dataset.icon].icon = e.target.value; });
+  box.querySelectorAll("[data-name]").forEach(inp => inp.oninput = e => { deliveryOptions[+inp.dataset.name].name = e.target.value; });
+  box.querySelectorAll("[data-url]").forEach(inp => inp.oninput = e => { deliveryOptions[+inp.dataset.url].url = e.target.value; });
+  box.querySelectorAll("[data-remove-del]").forEach(b => b.onclick = () => {
+    deliveryOptions.splice(+b.dataset.removeDel, 1);
+    renderDeliveryList();
+  });
+}
+
+$("addDeliveryBtn").onclick = () => {
+  deliveryOptions.push({ name: "", url: "", icon: "🛵" });
+  renderDeliveryList();
+};
+
+/* ===== Save Settings ===== */
+$("saveSettingsBtn").onclick = async () => {
+  const btn = $("saveSettingsBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ جاري الحفظ...";
+
+  try {
+    const data = {
+      name: $("setName").value.trim() || "مطعم القدموس",
+      subtitle: $("setSubtitle").value.trim(),
+      status: $("setStatus").value.trim() || "مفتوح الآن",
+      statusType: $("setStatusType").value,
+      heroImage: $("setHeroImage").value.trim(),
+      whatsapp: $("setWhatsapp").value.trim().replace(/\D/g, ''),
+      whatsappDisplay: $("setWhatsappDisplay").value.trim(),
+      phone: $("setPhone").value.trim().replace(/\D/g, ''),
+      phoneDisplay: $("setPhoneDisplay").value.trim(),
+      phone2: $("setPhone2").value.trim().replace(/\D/g, ''),
+      phone2Display: $("setPhone2Display").value.trim(),
+      address: $("setAddress").value.trim(),
+      mapUrl: $("setMapUrl").value.trim(),
+      deliveryNote: $("setDeliveryNote").value.trim(),
+      deliveryShow: $("setDeliveryShow").checked,
+      deliveryOptions: deliveryOptions.filter(o => o.name && o.url)
+    };
+
+    await setDoc(doc(db, "settings", "info"), data, { merge: true });
+    showToast("✓ تم حفظ الإعدادات", "success");
+  } catch (err) {
+    console.error(err);
+    showToast("❌ فشل حفظ الإعدادات", "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "💾 حفظ جميع الإعدادات";
+  }
+};
+
+/* ===== Init Default Settings if Empty (First Login) ===== */
+async function ensureDefaultSettings() {
+  try {
+    const ref = doc(db, "settings", "info");
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+      await setDoc(ref, {
+        name: "مطعم القدموس",
+        subtitle: "دمشق - شارع الحمراء، مقابل بناء زارا",
+        status: "مفتوح الآن",
+        statusType: "open",
+        whatsapp: "963949185059",
+        whatsappDisplay: "0949185059",
+        phone: "9630113314502",
+        phoneDisplay: "011-3314502",
+        phone2: "963966773377",
+        phone2Display: "0966-773-377",
+        address: "دمشق - شارع الحمراء، مقابل بناء زارا",
+        mapUrl: "https://www.google.com/maps/search/?api=1&query=مطعم+القدموس+شارع+الحمرا+دمشق",
+        deliveryNote: "التوصيل متوفر داخل دمشق عبر:",
+        deliveryShow: true,
+        deliveryOptions: [
+          { name: "بي اوردر", url: "https://www.beeorder.co/", icon: "🛵" },
+          { name: "موفو", url: "https://movo.sy/", icon: "📱" },
+          { name: "توصيل خاص", url: "https://wa.me/963949185059", icon: "📞" }
+        ],
+        heroImage: "https://images.unsplash.com/photo-1544025162-d76694265947?w=1600&q=80"
+      });
+      console.log("Default settings created.");
+    }
+  } catch (err) {
+    console.error("ensureDefaultSettings:", err);
+  }
+}
+</script>
+</body>
+</html>
