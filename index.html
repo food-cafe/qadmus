@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+<meta name="theme-color" content="#8B4513">
+<title>مطعم القدموس | قائمة الطعام</title>
+<meta name="description" content="مطعم القدموس - مطبخ لبناني وشامي تقليدي في شارع الحمراء، دمشق">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brown:#8B4513;--brown-dark:#6B3410;--brown-light:#A0522D;
+  --gold:#C9A227;--gold-light:#E5C158;
+  --cream:#FAF3E0;--cream-dark:#F0E6CE;
+  --olive:#556B2F;--brick:#B22222;
+  --text:#2C1810;--text-light:#6B5B4A;
+  --white:#FFFFFF;
+  --shadow:0 4px 20px rgba(139,69,19,.12);
+  --shadow-lg:0 12px 40px rgba(139,69,19,.22);
+  --radius:16px;--radius-sm:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Cairo',sans-serif;background:var(--cream);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+img{display:block;max-width:100%}
+
+/* ===== Header ===== */
+.header{position:sticky;top:0;z-index:100;background:rgba(250,243,224,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,162,39,.25);transition:box-shadow .3s}
+.header.scrolled{box-shadow:var(--shadow)}
+.header-inner{max-width:1200px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--brown),var(--brown-dark));display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:900;font-size:20px;box-shadow:0 2px 8px rgba(139,69,19,.3)}
+.brand-text{display:flex;flex-direction:column}
+.brand-name{font-size:17px;font-weight:900;color:var(--brown-dark);line-height:1.2}
+.brand-sub{font-size:11px;color:var(--text-light);font-weight:600}
+.cart-btn{position:relative;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--brown),var(--brown-dark));color:var(--white);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 12px rgba(139,69,19,.3);transition:transform .2s}
+.cart-btn:active{transform:scale(.95)}
+.cart-badge{position:absolute;top:-4px;left:-4px;background:var(--brick);color:var(--white);font-size:11px;font-weight:900;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--cream)}
+.cart-badge.hidden{display:none}
+
+/* ===== Hero ===== */
+.hero{position:relative;min-height:440px;display:flex;align-items:center;justify-content:center;padding:40px 16px;overflow:hidden;background:linear-gradient(135deg,var(--brown-dark),var(--brown));}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:.55;transition:opacity .4s}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(107,52,16,.4) 0%,rgba(107,52,16,.75) 100%)}
+.hero-glass{position:relative;z-index:2;max-width:560px;width:100%;background:rgba(250,243,224,.13);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(201,162,39,.45);border-radius:24px;padding:32px 24px;text-align:center;color:var(--cream);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.hero-name{font-size:36px;font-weight:900;color:var(--gold-light);margin-bottom:6px;text-shadow:0 2px 12px rgba(0,0,0,.4);line-height:1.2}
+.hero-subtitle{font-size:14px;color:var(--cream);opacity:.95;font-weight:600;margin-bottom:18px}
+.hero-status{display:inline-flex;align-items:center;gap:8px;background:rgba(85,107,47,.85);color:#fff;padding:7px 16px;border-radius:30px;font-size:13px;font-weight:700;margin-bottom:22px;border:1px solid rgba(255,255,255,.2)}
+.hero-status.closed{background:rgba(178,34,34,.85)}
+.hero-status.orders{background:rgba(201,162,39,.9);color:var(--brown-dark)}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#7CFC00;box-shadow:0 0 8px #7CFC00;animation:pulse 2s infinite}
+.hero-status.closed .status-dot{background:#FF6B6B;box-shadow:0 0 8px #FF6B6B}
+.hero-status.orders .status-dot{background:var(--brown-dark);box-shadow:0 0 8px var(--brown-dark)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.hero-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.hero-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:30px;font-weight:700;font-size:14px;text-decoration:none;transition:transform .2s,box-shadow .2s;border:1.5px solid transparent}
+.hero-btn:active{transform:scale(.97)}
+.hero-btn.whatsapp{background:#25D366;color:#fff;box-shadow:0 4px 16px rgba(37,211,102,.4)}
+.hero-btn.map{background:rgba(250,243,224,.15);color:var(--cream);border-color:rgba(201,162,39,.6);backdrop-filter:blur(8px)}
+.hero-btn.call{background:var(--gold);color:var(--brown-dark);box-shadow:0 4px 16px rgba(201,162,39,.4)}
+
+/* ===== Delivery Section ===== */
+.delivery-section{max-width:1200px;margin:0 auto;padding:0 16px;transform:translateY(-28px);position:relative;z-index:5}
+.delivery-card{background:var(--white);border-radius:var(--radius);padding:18px 16px;box-shadow:var(--shadow-lg);border:1px solid rgba(201,162,39,.25);text-align:center}
+.delivery-title{font-size:14px;font-weight:700;color:var(--brown-dark);margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px}
+.delivery-options{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.delivery-opt{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:var(--cream);border:1.5px solid var(--gold);border-radius:30px;font-weight:700;font-size:13px;color:var(--brown-dark);text-decoration:none;transition:all .2s}
+.delivery-opt:active{transform:scale(.97);background:var(--gold);color:var(--white)}
+
+/* ===== Controls ===== */
+.controls{max-width:1200px;margin:0 auto;padding:24px 16px 8px}
+.search-wrap{position:relative;margin-bottom:18px}
+.search-input{width:100%;padding:16px 52px 16px 20px;border-radius:30px;border:1.5px solid rgba(201,162,39,.35);background:var(--white);font-family:inherit;font-size:15px;color:var(--text);font-weight:600;outline:none;transition:border-color .2s,box-shadow .2s;box-shadow:0 2px 10px rgba(139,69,19,.06)}
+.search-input:focus{border-color:var(--gold);box-shadow:0 4px 20px rgba(201,162,39,.2)}
+.search-input::placeholder{color:var(--text-light);font-weight:500}
+.search-icon{position:absolute;right:20px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:20px;pointer-events:none}
+
+.categories{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:none;-ms-overflow-style:none}
+.categories::-webkit-scrollbar{display:none}
+.cat-btn{padding:10px 20px;background:var(--white);color:var(--text-light);border:1.5px solid rgba(201,162,39,.3);border-radius:30px;font-weight:700;font-size:13.5px;white-space:nowrap;transition:all .2s;flex-shrink:0}
+.cat-btn:active{transform:scale(.96)}
+.cat-btn.active{background:linear-gradient(135deg,var(--brown),var(--brown-dark));color:var(--gold-light);border-color:var(--brown);box-shadow:0 4px 14px rgba(139,69,19,.3)}
+
+/* ===== Menu ===== */
+.menu-section{max-width:1200px;margin:0 auto;padding:8px 16px 100px}
+.menu-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;padding:0 4px}
+.menu-title{font-size:20px;font-weight:900;color:var(--brown-dark)}
+.menu-count{font-size:13px;color:var(--text-light);font-weight:600}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+@media(min-width:640px){.menu-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}}
+
+.card{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(201,162,39,.15);transition:transform .25s,box-shadow .25s;cursor:pointer;display:flex;flex-direction:column}
+.card:active{transform:scale(.97)}
+@media(hover:hover){.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}}
+.card-img{position:relative;aspect-ratio:1/1;overflow:hidden;background:var(--cream-dark)}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.card:hover .card-img img{transform:scale(1.06)}
+.card-cat{position:absolute;top:8px;right:8px;background:rgba(107,52,16,.9);color:var(--gold-light);padding:4px 10px;border-radius:20px;font-size:10.5px;font-weight:700;backdrop-filter:blur(4px)}
+.card-body{padding:12px;flex:1;display:flex;flex-direction:column;gap:6px}
+.card-name{font-size:14.5px;font-weight:800;color:var(--brown-dark);line-height:1.3}
+.card-desc{font-size:11.5px;color:var(--text-light);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:auto}
+.card-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+.card-price{font-size:16px;font-weight:900;color:var(--brown);line-height:1}
+.card-price small{font-size:10px;font-weight:700;color:var(--text-light)}
+.card-add{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--brown-dark);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;box-shadow:0 2px 8px rgba(201,162,39,.4);transition:transform .2s;flex-shrink:0}
+.card-add:active{transform:scale(.88)}
+
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-light)}
+.empty-state-icon{font-size:60px;margin-bottom:12px;opacity:.5}
+.empty-state-title{font-size:17px;font-weight:800;color:var(--brown-dark);margin-bottom:6px}
+.empty-state-text{font-size:13px}
+
+.skeleton{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(201,162,39,.15)}
+.skeleton-img{aspect-ratio:1/1;background:linear-gradient(90deg,var(--cream-dark) 0%,var(--cream) 50%,var(--cream-dark) 100%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+.skeleton-body{padding:12px;display:flex;flex-direction:column;gap:8px}
+.skeleton-line{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--cream-dark) 0%,var(--cream) 50%,var(--cream-dark) 100%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+.skeleton-line.w60{width:60%}.skeleton-line.w80{width:80%}.skeleton-line.w40{width:40%}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ===== Modal ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(44,24,16,.7);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;padding:0}
+@media(min-width:640px){.modal-overlay{align-items:center;padding:20px}}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal{background:var(--white);border-radius:24px 24px 0 0;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;transform:translateY(30px);transition:transform .35s cubic-bezier(.4,0,.2,1);position:relative}
+@media(min-width:640px){.modal{border-radius:24px;transform:scale(.92)}}
+.modal-overlay.open .modal{transform:translateY(0)}
+@media(min-width:640px){.modal-overlay.open .modal{transform:scale(1)}}
+.modal-close{position:absolute;top:12px;left:12px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.5);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:18px;z-index:5;backdrop-filter:blur(4px)}
+.modal-img{width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--cream-dark)}
+.modal-body{padding:22px 20px 24px}
+.modal-cat{display:inline-block;background:var(--cream);color:var(--brown);padding:4px 12px;border-radius:20px;font-size:11.5px;font-weight:700;margin-bottom:10px}
+.modal-title{font-size:22px;font-weight:900;color:var(--brown-dark);margin-bottom:8px;line-height:1.3}
+.modal-desc{font-size:14px;color:var(--text-light);line-height:1.7;margin-bottom:18px}
+.modal-price-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-top:16px;border-top:1.5px dashed rgba(201,162,39,.4)}
+.modal-price{font-size:26px;font-weight:900;color:var(--brown);line-height:1}
+.modal-price small{font-size:13px;font-weight:700;color:var(--text-light)}
+
+.qty-ctrl{display:flex;align-items:center;gap:12px;background:var(--cream);border-radius:30px;padding:6px;border:1.5px solid rgba(201,162,39,.3)}
+.qty-btn{width:36px;height:36px;border-radius:50%;background:var(--white);color:var(--brown);font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(139,69,19,.15);transition:transform .15s}
+.qty-btn:active{transform:scale(.9)}
+.qty-val{font-size:17px;font-weight:900;color:var(--brown-dark);min-width:24px;text-align:center}
+
+.add-btn{width:100%;margin-top:16px;padding:15px;border-radius:30px;background:linear-gradient(135deg,var(--brown),var(--brown-dark));color:var(--gold-light);font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 20px rgba(139,69,19,.3);transition:transform .2s}
+.add-btn:active{transform:scale(.97)}
+
+/* ===== Cart Drawer ===== */
+.drawer-overlay{position:fixed;inset:0;background:rgba(44,24,16,.6);backdrop-filter:blur(3px);z-index:300;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.drawer-overlay.open{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:100%;max-width:440px;background:var(--cream);z-index:301;transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:10px 0 40px rgba(0,0,0,.25)}
+.drawer.open{transform:translateX(0)}
+.drawer-header{padding:18px 20px;background:linear-gradient(135deg,var(--brown),var(--brown-dark));color:var(--cream);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.drawer-title{font-size:18px;font-weight:900;color:var(--gold-light);display:flex;align-items:center;gap:10px}
+.drawer-close{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.15);color:var(--cream);display:flex;align-items:center;justify-content:center;font-size:20px}
+.drawer-body{flex:1;overflow-y:auto;padding:16px}
+.cart-item{display:flex;gap:12px;background:var(--white);border-radius:var(--radius-sm);padding:10px;margin-bottom:10px;box-shadow:0 2px 8px rgba(139,69,19,.08);border:1px solid rgba(201,162,39,.15)}
+.cart-item-img{width:70px;height:70px;border-radius:8px;object-fit:cover;background:var(--cream-dark);flex-shrink:0}
+.cart-item-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.cart-item-name{font-size:13.5px;font-weight:800;color:var(--brown-dark);line-height:1.3}
+.cart-item-price{font-size:12px;color:var(--text-light);font-weight:600}
+.cart-item-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px}
+.cart-qty{display:flex;align-items:center;gap:8px;background:var(--cream);border-radius:20px;padding:3px}
+.cart-qty button{width:26px;height:26px;border-radius:50%;background:var(--white);color:var(--brown);font-size:16px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.cart-qty span{font-size:13px;font-weight:900;color:var(--brown-dark);min-width:18px;text-align:center}
+.cart-item-total{font-size:14px;font-weight:900;color:var(--brown)}
+.cart-remove{color:var(--brick);font-size:12px;font-weight:700;padding:2px 6px}
+
+.cart-empty{text-align:center;padding:60px 20px;color:var(--text-light)}
+.cart-empty-icon{font-size:70px;margin-bottom:14px;opacity:.35}
+.cart-empty-title{font-size:16px;font-weight:800;color:var(--brown-dark);margin-bottom:6px}
+
+.drawer-footer{padding:16px 20px 20px;background:var(--white);border-top:1.5px solid rgba(201,162,39,.25);box-shadow:0 -8px 24px rgba(139,69,19,.08)}
+.cart-total{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cart-total-label{font-size:14px;font-weight:700;color:var(--text-light)}
+.cart-total-val{font-size:22px;font-weight:900;color:var(--brown-dark)}
+.cart-total-val small{font-size:12px;color:var(--text-light)}
+.checkout-btn{width:100%;padding:15px;border-radius:30px;background:#25D366;color:#fff;font-size:15.5px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 20px rgba(37,211,102,.35);transition:transform .2s}
+.checkout-btn:active{transform:scale(.97)}
+.checkout-btn:disabled{opacity:.5;box-shadow:none;pointer-events:none}
+
+/* ===== Order Form ===== */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:13px;font-weight:700;color:var(--brown-dark);margin-bottom:6px}
+.form-label .req{color:var(--brick)}
+.form-input,.form-textarea{width:100%;padding:13px 15px;border-radius:12px;border:1.5px solid rgba(201,162,39,.3);background:var(--white);font-family:inherit;font-size:14.5px;color:var(--text);font-weight:600;outline:none;transition:border-color .2s;resize:none}
+.form-input:focus,.form-textarea:focus{border-color:var(--gold);box-shadow:0 2px 10px rgba(201,162,39,.15)}
+.form-textarea{min-height:80px}
+.form-note{font-size:12px;color:var(--text-light);margin-top:6px;line-height:1.6}
+.send-order-btn{width:100%;margin-top:8px;padding:15px;border-radius:30px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;font-size:15.5px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 20px rgba(37,211,102,.35);transition:transform .2s}
+.send-order-btn:active{transform:scale(.97)}
+
+/* ===== Toast ===== */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--brown-dark);color:var(--cream);padding:13px 24px;border-radius:30px;font-size:14px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:500;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;display:flex;align-items:center;gap:10px;border:1px solid rgba(201,162,39,.4);max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:#25D366;color:#fff;border-color:transparent}
+.toast.error{background:var(--brick);color:#fff;border-color:transparent}
+
+/* ===== Footer ===== */
+.footer{background:linear-gradient(135deg,var(--brown-dark),var(--brown));color:var(--cream);text-align:center;padding:36px 20px 28px;margin-top:20px}
+.footer-name{font-size:19px;font-weight:900;color:var(--gold-light);margin-bottom:6px}
+.footer-addr{font-size:13px;opacity:.85;margin-bottom:16px;font-weight:600}
+.footer-socials{display:flex;justify-content:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.footer-social{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;background:rgba(250,243,224,.12);border:1px solid rgba(201,162,39,.35);border-radius:24px;color:var(--cream);text-decoration:none;font-size:12.5px;font-weight:700;transition:background .2s}
+.footer-social:active{background:rgba(201,162,39,.3)}
+.footer-copy{font-size:11.5px;opacity:.7;font-weight:500;padding-top:14px;border-top:1px solid rgba(201,162,39,.2)}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header" id="header">
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <div class="logo" id="logoBox">ق</div>
+      <div class="brand-text">
+        <div class="brand-name" id="brandName">مطعم القدموس</div>
+        <div class="brand-sub" id="brandSub">شارع الحمراء</div>
+      </div>
+    </div>
+    <button class="cart-btn" id="openCartBtn" aria-label="السلة">
+      🛒<span class="cart-badge hidden" id="cartBadge">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-glass">
+    <h1 class="hero-name" id="heroName">مطعم القدموس</h1>
+    <p class="hero-subtitle" id="heroSubtitle">دمشق - شارع الحمراء، مقابل بناء زارا</p>
+    <div class="hero-status" id="heroStatus">
+      <span class="status-dot"></span>
+      <span id="heroStatusText">مفتوح الآن</span>
+    </div>
+    <div class="hero-actions" id="heroActions"></div>
+  </div>
+</section>
+
+<!-- ===== DELIVERY ===== -->
+<section class="delivery-section" id="deliverySection" style="display:none">
+  <div class="delivery-card">
+    <div class="delivery-title" id="deliveryTitle">🛵 خيارات التوصيل المتاحة</div>
+    <div class="delivery-options" id="deliveryOptions"></div>
+  </div>
+</section>
+
+<!-- ===== CONTROLS ===== -->
+<section class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="searchInput" placeholder="ابحث عن طبق...">
+  </div>
+  <div class="categories" id="categories"></div>
+</section>
+
+<!-- ===== MENU ===== -->
+<section class="menu-section">
+  <div class="menu-header">
+    <h2 class="menu-title">قائمة الطعام</h2>
+    <span class="menu-count" id="menuCount"></span>
+  </div>
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-name" id="footerName">مطعم القدموس</div>
+  <div class="footer-addr" id="footerAddr">دمشق - شارع الحمراء</div>
+  <div class="footer-socials" id="footerSocials"></div>
+  <div class="footer-copy">© <span id="year"></span> جميع الحقوق محفوظة</div>
+</footer>
+
+<!-- ===== MODAL: Item Details ===== -->
+<div class="modal-overlay" id="itemModal">
+  <div class="modal">
+    <button class="modal-close" id="closeItemModal">✕</button>
+    <img class="modal-img" id="modalImg" alt="">
+    <div class="modal-body">
+      <span class="modal-cat" id="modalCat"></span>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-price-row">
+        <div class="modal-price"><span id="modalPrice">0</span> <small>ل.س</small></div>
+        <div class="qty-ctrl">
+          <button class="qty-btn" id="modalQtyMinus">−</button>
+          <span class="qty-val" id="modalQty">1</span>
+          <button class="qty-btn" id="modalQtyPlus">+</button>
+        </div>
+      </div>
+      <button class="add-btn" id="modalAddBtn">🛒 أضف إلى السلة</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DRAWER: Cart ===== -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="cartDrawer">
+  <div class="drawer-header">
+    <div class="drawer-title">🛒 سلة الطلبات</div>
+    <button class="drawer-close" id="closeCartBtn">✕</button>
+  </div>
+  <div class="drawer-body" id="cartBody"></div>
+  <div class="drawer-footer" id="cartFooter" style="display:none">
+    <div class="cart-total">
+      <span class="cart-total-label">المجموع الكلي</span>
+      <span class="cart-total-val"><span id="cartTotal">0</span> <small>ل.س</small></span>
+    </div>
+    <button class="checkout-btn" id="checkoutBtn">📝 إتمام الطلب</button>
+  </div>
+</aside>
+
+<!-- ===== MODAL: Order Form ===== -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <button class="modal-close" id="closeOrderModal">✕</button>
+    <div class="modal-body">
+      <h2 class="modal-title" style="margin-bottom:14px">📝 بيانات الطلب</h2>
+      <p class="form-note" style="margin-bottom:16px">املأ بياناتك وسيتم إرسال الطلب عبر واتساب مباشرة للمطعم.</p>
+      <div class="form-group">
+        <label class="form-label">الاسم <span class="req">*</span></label>
+        <input type="text" class="form-input" id="custName" placeholder="اسمك الكريم">
+      </div>
+      <div class="form-group">
+        <label class="form-label">رقم الهاتف <span class="req">*</span></label>
+        <input type="tel" class="form-input" id="custPhone" placeholder="09xxxxxxxx">
+      </div>
+      <div class="form-group">
+        <label class="form-label">العنوان <span class="req">*</span></label>
+        <input type="text" class="form-input" id="custAddr" placeholder="المنطقة، الشارع، رقم البناء">
+      </div>
+      <div class="form-group">
+        <label class="form-label">ملاحظات (اختياري)</label>
+        <textarea class="form-textarea" id="custNotes" placeholder="أي ملاحظات إضافية..."></textarea>
+      </div>
+      <button class="send-order-btn" id="sendOrderBtn">📱 إرسال الطلب عبر واتساب</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC7wqsxUaKA2Tp5BeT4pEv8CrDGk89nNKw",
+  authDomain: "kadmous-69eca.firebaseapp.com",
+  projectId: "kadmous-69eca",
+  storageBucket: "kadmous-69eca.firebasestorage.app",
+  messagingSenderId: "883346998408",
+  appId: "1:883346998408:web:91bd0a9ba9f501203d0b3d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* ===== State ===== */
+let allItems = [];
+let settings = {
+  name: "مطعم القدموس",
+  subtitle: "دمشق - شارع الحمراء، مقابل بناء زارا",
+  status: "مفتوح الآن",
+  statusType: "open",
+  whatsapp: "963949185059",
+  whatsappDisplay: "0949185059",
+  phone: "0113314502",
+  phoneDisplay: "011-3314502",
+  phone2: "0966773377",
+  phone2Display: "0966-773-377",
+  address: "دمشق - شارع الحمراء، مقابل بناء زارا",
+  mapUrl: "https://www.google.com/maps/search/?api=1&query=مطعم+القدموس+شارع+الحمرا+دمشق",
+  deliveryNote: "التوصيل متوفر داخل دمشق عبر الخيارات التالية:",
+  deliveryShow: true,
+  deliveryOptions: [
+    { name: "بي اوردر", url: "https://www.beeorder.co/", icon: "🛵" },
+    { name: "موفو", url: "https://movo.sy/", icon: "📱" },
+    { name: "توصيل خاص", url: "https://wa.me/963949185059", icon: "📞" }
+  ],
+  heroImage: "https://images.unsplash.com/photo-1544025162-d76694265947?w=1600&q=80"
+};
+let activeCategory = "الكل";
+let searchQuery = "";
+let cart = []; // {id, name, price, imageUrl, qty}
+let currentItem = null;
+let currentQty = 1;
+
+/* ===== Helpers ===== */
+const $ = id => document.getElementById(id);
+const fmt = n => Number(n || 0).toLocaleString('en-US');
+
+function showToast(msg, type = "") {
+  const t = $("toast");
+  t.textContent = msg;
+  t.className = "toast show " + type;
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.className = "toast " + type, 2800);
+}
+
+/* ===== Render Settings ===== */
+function renderSettings() {
+  document.title = settings.name + " | قائمة الطعام";
+  $("brandName").textContent = settings.name;
+  $("brandSub").textContent = settings.subtitle || "";
+  $("heroName").textContent = settings.name;
+  $("heroSubtitle").textContent = settings.subtitle || "";
+  $("footerName").textContent = settings.name;
+  $("footerAddr").textContent = settings.address || "";
+
+  // Status
+  const st = $("heroStatus");
+  st.className = "hero-status " + (settings.statusType === "closed" ? "closed" : settings.statusType === "orders" ? "orders" : "");
+  $("heroStatusText").textContent = settings.status || "مفتوح الآن";
+
+  // Hero background
+  if (settings.heroImage) $("heroBg").style.backgroundImage = `url('${settings.heroImage}')`;
+
+  // Hero buttons
+  const wa = settings.whatsapp ? `https://wa.me/${settings.whatsapp}` : "#";
+  const mp = settings.mapUrl || "#";
+  let actionsHtml = "";
+  if (settings.whatsapp) actionsHtml += `<a class="hero-btn whatsapp" href="${wa}" target="_blank" rel="noopener">💬 واتساب</a>`;
+  if (settings.phone) actionsHtml += `<a class="hero-btn call" href="tel:${settings.phone}">📞 اتصل</a>`;
+  if (settings.mapUrl) actionsHtml += `<a class="hero-btn map" href="${mp}" target="_blank" rel="noopener">📍 الموقع</a>`;
+  $("heroActions").innerHTML = actionsHtml;
+
+  // Delivery
+  if (settings.deliveryShow && Array.isArray(settings.deliveryOptions) && settings.deliveryOptions.length) {
+    $("deliverySection").style.display = "block";
+    $("deliveryTitle").textContent = "🛵 " + (settings.deliveryNote || "خيارات التوصيل المتاحة");
+    $("deliveryOptions").innerHTML = settings.deliveryOptions.map(o =>
+      `<a class="delivery-opt" href="${o.url || '#'}" target="_blank" rel="noopener"><span>${o.icon || '🛵'}</span>${o.name || ''}</a>`
+    ).join("");
+  } else {
+    $("deliverySection").style.display = "none";
+  }
+
+  // Footer socials
+  let socials = "";
+  if (settings.whatsapp) socials += `<a class="footer-social" href="${wa}" target="_blank" rel="noopener">💬 واتساب</a>`;
+  if (settings.phone) socials += `<a class="footer-social" href="tel:${settings.phone}">📞 ${settings.phoneDisplay || settings.phone}</a>`;
+  if (settings.phone2) socials += `<a class="footer-social" href="tel:${settings.phone2}">☎️ ${settings.phone2Display || settings.phone2}</a>`;
+  $("footerSocials").innerHTML = socials;
+}
+
+/* ===== Render Categories ===== */
+function renderCategories() {
+  const cats = ["الكل", ...new Set(allItems.map(i => i.category).filter(Boolean))];
+  $("categories").innerHTML = cats.map(c =>
+    `<button class="cat-btn ${c === activeCategory ? 'active' : ''}" data-cat="${c}">${c}</button>`
+  ).join("");
+  document.querySelectorAll(".cat-btn").forEach(btn => {
+    btn.onclick = () => {
+      activeCategory = btn.dataset.cat;
+      renderCategories();
+      renderMenu();
+    };
+  });
+}
+
+/* ===== Apply Filters ===== */
+function applyFilters() {
+  const q = searchQuery.trim().toLowerCase();
+  return allItems
+    .filter(i => {
+      if (activeCategory !== "الكل" && i.category !== activeCategory) return false;
+      if (!q) return true;
+      return (i.name || "").toLowerCase().includes(q) || (i.description || "").toLowerCase().includes(q);
+    })
+    .sort((a, b) => (a.category || '').localeCompare(b.category || '', 'ar'));
+}
+
+/* ===== Render Menu ===== */
+function renderMenu() {
+  const filtered = applyFilters();
+  const grid = $("menuGrid");
+  $("menuCount").textContent = filtered.length ? `${filtered.length} صنف` : "";
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="empty-state-icon">🍽️</div>
+      <div class="empty-state-title">لا توجد أصناف</div>
+      <div class="empty-state-text">${allItems.length ? "جرب البحث بكلمة أخرى" : "القائمة قيد التحديث من قبل الإدارة"}</div>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(i => {
+    const img = i.imageUrl || "https://placehold.co/600x600/8B4513/C9A227?text=Kadmous";
+    return `<div class="card" data-id="${i.id}">
+      <div class="card-img">
+        <img src="${img}" alt="${i.name}" loading="lazy" onerror="this.src='https://placehold.co/600x600/8B4513/C9A227?text=Kadmous'">
+        <span class="card-cat">${i.category || ''}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${i.name || ''}</div>
+        <div class="card-desc">${i.description || '&nbsp;'}</div>
+        <div class="card-footer">
+          <div class="card-price">${fmt(i.price)} <small>ل.س</small></div>
+          <button class="card-add" data-add="${i.id}" aria-label="أضف">+</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+
+  // Attach events
+  grid.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("click", e => {
+      if (e.target.closest("[data-add]")) {
+        e.stopPropagation();
+        const id = e.target.closest("[data-add]").dataset.add;
+        const item = allItems.find(x => x.id === id);
+        if (item) addToCart(item, 1);
+        return;
+      }
+      const id = card.dataset.id;
+      const item = allItems.find(x => x.id === id);
+      if (item) openItemModal(item);
+    });
+  });
+}
+
+/* ===== Item Modal ===== */
+function openItemModal(item) {
+  currentItem = item;
+  currentQty = 1;
+  $("modalImg").src = item.imageUrl || "https://placehold.co/600x600/8B4513/C9A227?text=Kadmous";
+  $("modalImg").onerror = function() { this.src = "https://placehold.co/600x600/8B4513/C9A227?text=Kadmous"; };
+  $("modalCat").textContent = item.category || "";
+  $("modalTitle").textContent = item.name || "";
+  $("modalDesc").textContent = item.description || "طبق مميز من مطبخنا";
+  $("modalPrice").textContent = fmt(item.price);
+  $("modalQty").textContent = currentQty;
+  $("itemModal").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeItemModal() {
+  $("itemModal").classList.remove("open");
+  document.body.style.overflow = "";
+}
+$("closeItemModal").onclick = closeItemModal;
+$("itemModal").addEventListener("click", e => { if (e.target === $("itemModal")) closeItemModal(); });
+
+$("modalQtyPlus").onclick = () => { currentQty++; $("modalQty").textContent = currentQty; };
+$("modalQtyMinus").onclick = () => { if (currentQty > 1) { currentQty--; $("modalQty").textContent = currentQty; } };
+$("modalAddBtn").onclick = () => {
+  if (!currentItem) return;
+  addToCart(currentItem, currentQty);
+  closeItemModal();
+};
+
+/* ===== Cart ===== */
+function addToCart(item, qty) {
+  const existing = cart.find(c => c.id === item.id);
+  if (existing) existing.qty += qty;
+  else cart.push({ id: item.id, name: item.name, price: item.price, imageUrl: item.imageUrl, qty });
+  updateCartUI();
+  showToast(`✓ أضيف "${item.name}" إلى السلة`, "success");
+}
+function removeFromCart(id) {
+  cart = cart.filter(c => c.id !== id);
+  updateCartUI();
+}
+function updateQty(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) removeFromCart(id);
+  else updateCartUI();
+}
+function cartTotal() {
+  return cart.reduce((s, c) => s + (Number(c.price) || 0) * c.qty, 0);
+}
+function updateCartUI() {
+  const count = cart.reduce((s, c) => s + c.qty, 0);
+  const badge = $("cartBadge");
+  if (count > 0) { badge.textContent = count; badge.classList.remove("hidden"); }
+  else badge.classList.add("hidden");
+
+  const body = $("cartBody");
+  if (!cart.length) {
+    body.innerHTML = `<div class="cart-empty">
+      <div class="cart-empty-icon">🛒</div>
+      <div class="cart-empty-title">السلة فارغة</div>
+      <div class="empty-state-text">أضف بعض الأطباق للبدء</div>
+    </div>`;
+    $("cartFooter").style.display = "none";
+    return;
+  }
+  body.innerHTML = cart.map(c => `
+    <div class="cart-item">
+      <img class="cart-item-img" src="${c.imageUrl || 'https://placehold.co/200x200/8B4513/C9A227?text=K'}" onerror="this.src='https://placehold.co/200x200/8B4513/C9A227?text=K'" alt="">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${c.name}</div>
+        <div class="cart-item-price">${fmt(c.price)} ل.س</div>
+        <div class="cart-item-row">
+          <div class="cart-qty">
+            <button data-minus="${c.id}">−</button>
+            <span>${c.qty}</span>
+            <button data-plus="${c.id}">+</button>
+          </div>
+          <div class="cart-item-total">${fmt(c.price * c.qty)} ل.س</div>
+        </div>
+        <button class="cart-remove" data-remove="${c.id}">🗑️ حذف</button>
+      </div>
+    </div>
+  `).join("");
+
+  body.querySelectorAll("[data-plus]").forEach(b => b.onclick = () => updateQty(b.dataset.plus, 1));
+  body.querySelectorAll("[data-minus]").forEach(b => b.onclick = () => updateQty(b.dataset.minus, -1));
+  body.querySelectorAll("[data-remove]").forEach(b => b.onclick = () => removeFromCart(b.dataset.remove));
+
+  $("cartTotal").textContent = fmt(cartTotal());
+  $("cartFooter").style.display = "block";
+}
+
+/* ===== Cart Drawer ===== */
+function openCart() {
+  $("cartDrawer").classList.add("open");
+  $("drawerOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeCart() {
+  $("cartDrawer").classList.remove("open");
+  $("drawerOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+$("openCartBtn").onclick = openCart;
+$("closeCartBtn").onclick = closeCart;
+$("drawerOverlay").onclick = closeCart;
+
+/* ===== Order Form ===== */
+$("checkoutBtn").onclick = () => {
+  if (!cart.length) return;
+  closeCart();
+  $("orderModal").classList.add("open");
+  document.body.style.overflow = "hidden";
+};
+$("closeOrderModal").onclick = () => {
+  $("orderModal").classList.remove("open");
+  document.body.style.overflow = "";
+};
+$("orderModal").addEventListener("click", e => {
+  if (e.target === $("orderModal")) {
+    $("orderModal").classList.remove("open");
+    document.body.style.overflow = "";
+  }
+});
+
+$("sendOrderBtn").onclick = () => {
+  const name = $("custName").value.trim();
+  const phone = $("custPhone").value.trim();
+  const addr = $("custAddr").value.trim();
+  const notes = $("custNotes").value.trim();
+
+  if (!name) return showToast("⚠️ الرجاء إدخال الاسم", "error");
+  if (!phone) return showToast("⚠️ الرجاء إدخال رقم الهاتف", "error");
+  if (!addr) return showToast("⚠️ الرجاء إدخال العنوان", "error");
+
+  let msg = `🌟 *طلب جديد من ${settings.name}* 🌟\n\n`;
+  msg += `👤 الاسم: ${name}\n`;
+  msg += `📞 الهاتف: ${phone}\n`;
+  msg += `📍 العنوان: ${addr}\n`;
+  if (notes) msg += `📝 ملاحظات: ${notes}\n`;
+  msg += `\n🛒 *تفاصيل الطلب:*\n━━━━━━━━━━━━━━━\n`;
+  cart.forEach((c, i) => {
+    msg += `${i + 1}. ${c.name} × ${c.qty} = ${fmt(c.price * c.qty)} ل.س\n`;
+  });
+  msg += `━━━━━━━━━━━━━━━\n💰 *المجموع: ${fmt(cartTotal())} ل.س*\n\n`;
+  msg += `شكراً لتعاملكم معنا 🌹`;
+
+  const url = `https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(msg)}`;
+  window.open(url, "_blank");
+  $("orderModal").classList.remove("open");
+  document.body.style.overflow = "";
+  showToast("✓ جاري تحويلك للواتساب...", "success");
+};
+
+/* ===== Search ===== */
+$("searchInput").addEventListener("input", e => {
+  searchQuery = e.target.value;
+  renderMenu();
+});
+
+/* ===== Header Scroll ===== */
+window.addEventListener("scroll", () => {
+  $("header").classList.toggle("scrolled", window.scrollY > 10);
+});
+
+/* ===== Firebase Listeners ===== */
+function listenMenu() {
+  const menuRef = doc(db, "menu", "all");
+  onSnapshot(menuRef, snap => {
+    if (snap.exists()) {
+      const data = snap.data();
+      allItems = Array.isArray(data.items) ? data.items : [];
+    } else {
+      allItems = [];
+    }
+    renderCategories();
+    renderMenu();
+  }, err => {
+    console.error("Menu listener error:", err);
+    allItems = [];
+    renderMenu();
+  });
+}
+
+function listenSettings() {
+  const ref = doc(db, "settings", "info");
+  onSnapshot(ref, snap => {
+    if (snap.exists()) {
+      const data = snap.data();
+      settings = { ...settings, ...data };
+      // Ensure default delivery options if empty
+      if (!Array.isArray(settings.deliveryOptions) || !settings.deliveryOptions.length) {
+        settings.deliveryOptions = [
+          { name: "بي اوردر", url: "https://www.beeorder.co/", icon: "🛵" },
+          { name: "موفو", url: "https://movo.sy/", icon: "📱" },
+          { name: "توصيل خاص", url: "https://wa.me/963949185059", icon: "📞" }
+        ];
+      }
+    }
+    renderSettings();
+  }, err => {
+    console.error("Settings listener error:", err);
+    renderSettings();
+  });
+}
+
+/* ===== Init ===== */
+function init() {
+  $("year").textContent = new Date().getFullYear();
+  // Show skeleton while loading
+  $("menuGrid").innerHTML = Array.from({ length: 6 }, () => `
+    <div class="skeleton">
+      <div class="skeleton-img"></div>
+      <div class="skeleton-body">
+        <div class="skeleton-line w80"></div>
+        <div class="skeleton-line w60"></div>
+        <div class="skeleton-line w40"></div>
+      </div>
+    </div>`).join("");
+  renderSettings();
+  listenMenu();
+  listenSettings();
+}
+
+init();
+</script>
+</body>
+</html>
